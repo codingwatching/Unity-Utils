@@ -1,3 +1,6 @@
+## [1.0.22] - 2025-12-26
+- Added FindElement extension methods for VisualElement searches using predicates
+
 ## [1.0.21] - 2025-11-02
 - Added Span, Delegate, UnityEvent and more new extension methods
 - Added Allocation Counter

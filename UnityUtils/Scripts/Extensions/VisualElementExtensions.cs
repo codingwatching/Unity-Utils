@@ -97,5 +97,51 @@ namespace UnityUtils {
                 imageContainer.style.backgroundImage = new StyleBackground(texture);
             }
         }
+        
+        /// <summary>
+        /// Finds an element recursively using a predicate function.
+        /// Unity's Query().Where() only searches descendants, so this method checks the element itself first.
+        /// </summary>
+        /// <param name="element">The VisualElement to search in (including itself).</param>
+        /// <param name="predicate">The predicate function to match elements.</param>
+        /// <returns>The found VisualElement, or null if not found.</returns>
+        static VisualElement FindElement(this VisualElement element, System.Func<VisualElement, bool> predicate) {
+            if (predicate(element)) {
+                return element;
+            }
+            return element.Query<VisualElement>().Where(predicate).First();
+        }
+
+        /// <summary>
+        /// Finds an element by name recursively.
+        /// </summary>
+        /// <param name="element">The VisualElement to search in (including itself).</param>
+        /// <param name="name">The name of the element to find.</param>
+        /// <returns>The found VisualElement, or null if not found.</returns>
+        public static VisualElement FindElementByName(this VisualElement element, string name) {
+            return element.FindElement(e => e.name == name);
+        }
+
+        /// <summary>
+        /// Finds an element by tooltip recursively.
+        /// Unity's Query API doesn't provide tooltip search, so this uses Query().Where() with a predicate.
+        /// </summary>
+        /// <param name="element">The VisualElement to search in (including itself).</param>
+        /// <param name="tooltip">The tooltip text of the element to find.</param>
+        /// <returns>The found VisualElement, or null if not found.</returns>
+        public static VisualElement FindElementByTooltip(this VisualElement element, string tooltip) {
+            return element.FindElement(e => e.tooltip == tooltip);
+        }
+
+        /// <summary>
+        /// Finds an element by CSS class recursively.
+        /// </summary>
+        /// <param name="element">The VisualElement to search in (including itself).</param>
+        /// <param name="className">The CSS class name to find.</param>
+        /// <param name="filter">Optional filter function to further refine the search.</param>
+        /// <returns>The found VisualElement, or null if not found.</returns>
+        public static VisualElement FindElementByClass(this VisualElement element, string className, System.Func<VisualElement, bool> filter = null) {
+            return element.FindElement(e => e.ClassListContains(className) && (filter == null || filter(e)));
+        }
     }
 }
