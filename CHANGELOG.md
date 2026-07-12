@@ -1,3 +1,13 @@
+## [1.0.23] - 2026-07-12
+- Added new extension methods from `UtilityExtensions`:
+  - `AwaitableExtensions`: `DelayFramesAsync`, `RunOnBackgroundThread`
+  - `TransformExtensions`: `SetPose`, `GetPose`, `GetHierarchyPath`
+  - `BoundsExtensions`: `ExpandToInclude`
+  - `LayerMaskExtensions`: `CreateFromLayer`
+  - `GameObjectExtensions`: `IsInLayerMask`
+  - `ComponentExtensions`: `GetComponentInHierarchy`, `GetComponentInParentOnly`
+- Added `BoundsExtensions` and `ComponentExtensions` classes to the library.
+
 ## [1.0.22] - 2025-12-26
 - Added FindElement extension methods for VisualElement searches using predicates
 

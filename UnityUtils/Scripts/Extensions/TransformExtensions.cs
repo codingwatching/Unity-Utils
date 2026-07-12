@@ -6,6 +6,67 @@ using Object = UnityEngine.Object;
 namespace UnityUtils {
     public static class TransformExtensions {
         /// <summary>
+        /// Sets a transform position and rotation from a <see cref="Pose"/>.
+        /// </summary>
+        /// <param name="transform">The transform to modify.</param>
+        /// <param name="pose">The pose containing world position and world rotation.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="transform"/> is null.</exception>
+        /// <example>
+        /// <code>
+        /// Pose savedPose = savePoint.GetPose();
+        /// cameraRig.SetPose(savedPose);
+        /// </code>
+        /// </example>
+        public static void SetPose(this Transform transform, in Pose pose) {
+            if (!transform) throw new ArgumentNullException(nameof(transform));
+
+            transform.SetPositionAndRotation(pose.position, pose.rotation);
+        }
+
+        /// <summary>
+        /// Gets a transform position and rotation as a <see cref="Pose"/>.
+        /// </summary>
+        /// <param name="transform">The transform to read.</param>
+        /// <returns>A pose containing world position and world rotation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="transform"/> is null.</exception>
+        /// <example>
+        /// <code>
+        /// Pose handPose = handTransform.GetPose();
+        /// </code>
+        /// </example>
+        public static Pose GetPose(this Transform transform) {
+            if (!transform) throw new ArgumentNullException(nameof(transform));
+
+            transform.GetPositionAndRotation(out var position, out var rotation);
+            return new Pose(position, rotation);
+        }
+
+        /// <summary>
+        /// Returns the full hierarchy path of this transform from root to current node.
+        /// </summary>
+        /// <param name="transform">The transform to build the path for.</param>
+        /// <returns>A slash-separated hierarchy path.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="transform"/> is null.</exception>
+        /// <example>
+        /// <code>
+        /// // Example output: "World/Enemies/Boss"
+        /// string hierarchyPath = bossRoot.GetHierarchyPath();
+        /// </code>
+        /// </example>
+        public static string GetHierarchyPath(this Transform transform) {
+            if (!transform) throw new ArgumentNullException(nameof(transform));
+
+            var path = transform.name;
+
+            while (transform.parent != null) {
+                transform = transform.parent;
+                path = $"{transform.name}/{path}";
+            }
+
+            return path;
+        }
+
+        /// <summary>
         /// Check if the transform is within a certain distance and optionally within a certain angle (FOV) from the target transform.
         /// </summary>
         /// <param name="source">The transform to check.</param>
